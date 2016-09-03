@@ -1,0 +1,118 @@
+@charset "UTF-8";
+/* ——————————————————— EXPERIMENT-WIDE ELEMENTS ——————————————————— */
+body {
+	font-family: Helvetica, Arial, sans-serif;
+    /*background-color: #CAEAE7;*/
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	font-family: Quicksand, Helvetica, Arial, sans-serif;
+}
+
+p, h2, h3 {
+    clear: left;
+}
+
+
+button {
+	height: 50px;
+	font-size: 12pt;
+	width: 200px;
+	display:block;
+	margin: 20px auto 20px auto;
+	padding: 0 20px;
+	background-color: #BFF58F;
+	border-radius: 5px;
+	border: none;
+    clear: left
+}
+
+.continue-inactive {
+    background-color: #bdbdbd;
+    color: #e1e1e1;
+}
+
+.continue-active {
+    background-color: #FF9108;
+    color: #fbeedf;
+}
+
+.slide{
+	background-color: #FFF;
+    padding: 0px;
+    margin: 0 auto;
+    width: 75vw;
+    min-height: 100vh;
+    text-align: center;
+}
+
+#jspsych-target {
+    text-align: center;
+}
+
+.left-text {
+    text-align: left;
+}
+
+.unselected, .selected {
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 5px;
+}
+
+.unselected {
+    border-color: #ffffff;
+}
+
+.selected {
+    /* border-color: #caea87; */
+    -webkit-box-shadow: 0 0 15px 5px #caea87, inset 0px 0px 0px 5px #fff;
+    -moz-box-shadow: 0 0 15px 5px #caea87, inset 0px 0px 0px 5px #fff;
+    box-shadow: 0 0 15px 5px #caea87, inset 0px 0px 0px 5px #fff;
+}
+
+.centered-div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* ——————————————————— FISHERMEN ——————————————————— */
+
+.fishing-header p {
+    text-align: center;
+}
+
+.fishing-container, .fishing-village {
+    display: block;
+    width: 800px;
+    margin: 0 auto;
+}
+
+.fishing-container ul {
+    list-style: none;
+}
+
+/* ——————————————————— SURVEY ——————————————————— */
+#survey input[type="text"] {
+    width: 8em;
+    font-size: 12pt;
+}
+
+#i0-wrapper {
+    background-color: #CAEAE7;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+#consent {
+    background-color: #FFFFFF;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}

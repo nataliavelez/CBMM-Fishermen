@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Go Fish!</title>
+        
+        <!-- Load jsPsych -->
+        <script src='_shared/js/jquery-1.11.1.min.js'></script>
+        <script src='jspsych/jspsych.js'></script>
+        <script src ='jspsych/plugins/jspsych-html.js'></script>
+        <script src='jspsych/plugins/jspsych-text.js'></script>
+        <script src='jspsych/plugins/jspsych-survey-multi-choice.js'></script>
+        <script src='jspsych/plugins/jspsych-survey-text.js'></script>
+        <script src='jspsych/plugins/jspsych-single-stim.js'></script>
+        
+        <link href='jspsych/css/jspsych.css' rel='stylesheet' type='text/css'></link>
+        
+        <!-- CocoLab utilities -->
+        <script src = '_shared/js/underscore-min.js'></script>
+        <script src = '_shared/js/mmturkey.js'></script>
+        <script src = '_shared/js/browser.detect.js'></script>
+        
+        <!-- Homemade plugins -->
+        <script src = 'scripts/user-plugins/fishing-game.js'></script>
+        <script src = 'scripts/user-plugins/new-block.js'></script>
+
+        <!-- Other experiment-specific scripts -->
+        <script src = 'scripts/utils.js'></script>
+        <script src = 'scripts/scenarios.js'></script>
+        <script src = 'scripts/counterbalancer.js'></script>
+        <script src = 'scripts/fishing-timeline.js'></script>
+        <link href='styles/experiment-style.css' rel='stylesheet' type='text/css'></link>
+    </head>
+
+    <body>
+        <div id = "jspsych-target">
+        </div>
+        
+        <div id = "templates">
+            <div id = "fishing-game">
+                <div class = 'fishing-container'>
+                    <div class = 'fishing-header'>
+                        <p>Scenario {0} of {1}</p>
+                        <p>What will you do?</p>
+                    </div>
+
+                    <img class = 'fishing-village' />
+
+                    <ul>
+                        <li>Fisherman A: <select class = 'a'>
+                            <option value = '' label = ''></option>
+                            <option value = 'fish' label = "Catch fish"></option>
+                            <option value = 'tree' label = "Remove tree(s)"></option>
+                            </select>
+                        </li>
+                        <li>Fisherman B: <select class = 'b'>
+                            <option value = '' label = ''></option>
+                            <option value = 'fish' label = "Catch fish"></option>
+                            <option value = 'tree' label = "Remove tree(s)"></option>
+                            </select></li>
+                        <li>Fisherman C: <select class = 'c'>
+                            <option value = '' label = ''></option>
+                            <option value = 'fish' label = "Catch fish"></option>
+                            <option value = 'tree' label = "Remove tree(s)"></option>
+                            </select></li>
+                    </ul>
+
+                    <button class = 'continue-inactive'>Continue</button>
+                </div>
+            </div>
+            
+            <div id = "new-block">
+                <h1>Get ready!</h1>
+                <p>You are now changing to a new village. Keep in mind that your player's strengths may have changed!</p>
+                <img class = 'fishing-village' />
+                
+                <button class = 'continue-active'>Continue</button>
+            </div>
+            
+            </div>
+    </body>
+
+</html>

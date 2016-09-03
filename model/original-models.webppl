@@ -1,0 +1,140 @@
+// ==== HELPER FUNCTIONS ====
+var actionSpace = ['tree', 'fish']
+
+// All possible combinations of actions
+var allActions = _.flatten(map(function(a){
+	_.flatten(map(function(b){
+		map(function(c){
+			return [a, b, c]
+		}, actionSpace)
+	}, actionSpace), true)
+}, actionSpace), true)
+
+
+
+// Evaluates  current state and returns payoff
+var getPayoff = function(trees, strengths, actions) {
+	// Summarise each fisherman's strength and action
+	var fishermen = zip(strengths, actions)
+
+	// Split fishermen into fish guys and tree guys
+	var fish_guys = filter(function(e) {return e[1] == 'fish'}, fishermen)
+	var tree_guys = filter(function(e) {return e[1] == 'tree'}, fishermen)
+
+	// Count number of trees cleared and fish caught
+	var fish_caught = sum(map(function(e) {return e[0]}, fish_guys))
+	var trees_cleared = sum(map(function(e) {return e[0]}, tree_guys))
+
+	// Compute payoff
+	var payoff = trees_cleared >= trees ? fish_caught : 0
+
+	return payoff
+}
+
+// Evaluates current state and returns 'true' if it is optimal
+var isOptimal = function(trees, strengths, actions) {
+	var bestOutcome  = _.max(map(function(s){
+		getPayoff(trees, strengths, s)
+	}, allActions))
+
+	return getPayoff(trees, strengths, actions) == bestOutcome
+}
+
+// ==== ONE-SHOT MODELS ==== 
+// Fishermen can choose to clear the trees or catch fish
+var actionPrior = function(p) {
+	return flip(p) ? "tree" : "fish"
+}
+
+/*
+	INPUT
+	trees: # of trees blocking the road (int)
+	strengths: strength of each agent (array of ints)
+	agent: agent being queried (int; if not included, returns all)
+
+	In recursive model:
+	alpha: temperature parameter (num)
+	depth: number of recursive steps (int)
+
+	OUTPUT
+	Enumerates possible actions (either an array of all agents' actions, 
+	if agent is not defined, or a particular agent's action)
+*/
+
+// Model A: Samples uniformly over optimal outcomes
+var uniformOverBest = function(trees, strengths, agent) {
+	
+	return Infer({method: 'enumerate'}, function(){
+		// Sample action from priors (uniform for now)
+		var actions = repeat(3, function(){return actionPrior(0.5)})
+		
+		// Condition on being the best possible outcome
+		condition(isOptimal(trees, strengths, actions))
+
+		// If agent is defined, returns agent i's actions
+		// Else, returns all agents' actions
+		return agent == undefined ? actions : actions[agent]
+
+	})
+}
+
+// Model B: Chooses option to maximize expected utility (with recursion)
+// TODO: Return the whole group's actions?
+var recursiveSoftMax = dp.cache(function(trees, myStrength, otherStrengths, alpha, depth) {
+	return Infer({method: 'enumerate'}, function(){
+		// Sample an action
+		var myAction = actionPrior(0.5)
+
+		if (depth > 0) {
+			// Split into POVs
+			var POVs = [[myStrength].concat(otherStrengths[1]),
+			[myStrength].concat(otherStrengths[0])]
+
+			// Calculate expected utility
+			var utility = expectation(Infer({method: 'enumerate'},
+				function(){
+					// Sample other players' actions recursively
+					var otherActions = map2(function(mystr, otherstr){
+						return sample(recursiveSoftMax(trees, mystr, otherstr, alpha, depth-1))
+					}, otherStrengths, POVs)
+
+					// Combine strengths and actions (for evaluation)
+					var outcome = [myAction].concat(otherActions)
+					var strengths = [myStrength].concat(otherStrengths)
+
+					// Return possible payoff
+					return getPayoff(trees, strengths, outcome)
+
+				}))
+
+			factor(alpha * utility)
+
+			} else {
+			// All possible outcomes
+			var possibleStates = filter(function(e){
+				return e[0] == myAction
+			}, allActions);
+
+			// Calculate expected utility
+			var utility = expectation(Infer({method: 'enumerate'},
+				function(){
+					// Randomly sample potential outcomes
+					var outcome = uniformDraw(possibleStates)
+
+					// Combine strengths and actions (for evaluation)
+					var strengths = [myStrength].concat(otherStrengths)
+
+					return getPayoff(trees, strengths, outcome)
+				}))
+
+			factor(alpha * utility)
+		}
+
+		//factor(alpha * utility)
+
+		return myAction
+	})
+
+})
+
+recursiveSoftMax(3, 3, [1, 2], 1, 2)

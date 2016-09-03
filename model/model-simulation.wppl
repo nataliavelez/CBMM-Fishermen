@@ -1,0 +1,233 @@
+// Each agent is represented using a simple generic "agent" function
+// Each agent samples their own action
+// A "monitoring" function evaluates all three agents' actions and returns
+// the payoff
+// The group's beliefs are then updated for the next trial
+// (NOTE: As a simplifying assumption, we assume here that all agents share
+// the same beliefs)
+
+// ==== UTILS ====
+//// Vector operations
+// Multiply an array by a scalar
+var scalarMult = function(arr, scalar) {
+	return map(function(x){return x * scalar}, arr)
+}
+
+// Add two arrays together
+var vAdd = function(arr1, arr2) {
+	return map2(function(x,y) {return x + y}, arr1, arr2)
+}
+
+// Subtract two arrays
+var vSub = function(arr1, arr2) {
+	return map2(function(x,y) {return x - y}, arr1, arr2)
+}
+
+// Dot product
+var vDot = function(arr1, arr2) {
+	return sum(map2(function(x,y) {return x * y}, arr1, arr2))
+}
+
+// Multiply a matrix with a vector
+var vmMult = function(mat, vec) {
+	return map(function(x){return vDot(x, vec)}, mat)
+}
+
+// Transposes a matrix
+var mTranspose = function(mat) {
+	return _.zip.apply(_, mat)
+}
+
+// Normalizes a vector
+var vNorm = function(vec) {
+	return scalarMult(vec, 1.0/sum(vec))
+}
+
+// Helper function - converts actions (array of strings) to binary vector
+var convertActions = function(actions) {
+	var binaryActions = map(function(e){return e == 'tree' ? 1 : 0}, actions)
+	return binaryActions
+}
+
+// Converts a Marginal object to a matrix of actions and vector of probabilities
+var distToMat = function(marg) {
+	// Recover possible outcomes & outcome probabilities from distribution
+	var distro = marg.params.dist
+	var actions = map(function(key){ return distro[key]['val']}, Object.keys(distro))
+	var probs = map(function(key){ return distro[key]['prob']}, Object.keys(distro))
+
+	// Convert actions to a binary matrix
+	var binaryActions = map(convertActions, actions)
+
+	return {'actions': binaryActions, 'prob': probs}
+}
+
+// ==== HELPER FUNCTIONS ====
+var actionSpace = ['tree', 'fish']
+
+// (Sorry this is hard-coded, I'm lazy)
+var allActions = [['fish, fish, fish'], ['fish', 'fish', 'tree'],
+				  ['fish', 'tree', 'fish'], ['fish', 'tree', 'tree'],
+				  ['tree', 'fish', 'fish'], ['tree', 'fish', 'tree'],
+				  ['tree', 'tree', 'fish'], ['tree', 'tree', 'tree']]
+
+var actionPrior = function(p) {
+	return flip(p) ? "tree" : "fish"
+}
+
+var getPayoff = dp.cache(function(state, actions) {
+	// Summarise each fisherman's strength and action
+	var fishermen = zip(state['strengths'], actions)
+
+	// Split fishermen into fish guys and tree guys
+	var fish_guys = filter(function(e) {return e[1] == 'fish'}, fishermen)
+	var tree_guys = filter(function(e) {return e[1] == 'tree'}, fishermen)
+
+	// Count number of trees cleared and fish caught
+	var fish_caught = sum(map(function(e) {return e[0]}, fish_guys))
+	var trees_cleared = sum(map(function(e) {return e[0]}, tree_guys))
+
+	// Compute payoff
+	var payoff = trees_cleared >= state['trees'] ? fish_caught : 0
+
+	return payoff
+})
+
+// Evaluates current state and returns 'true' if it is optimal
+var isOptimal = function(state, actions) {
+	var bestOutcome  = _.max(map(function(a){
+		getPayoff(state, a)
+	}, allActions))
+
+	return getPayoff(state, actions) == bestOutcome
+}
+
+
+
+// ==== RL MODEL ==== //
+
+// Test trials
+var testTrials = [{'strengths': [1, 1, 1], 'trees': 1},
+				  {'strengths': [2, 2, 2], 'trees': 2},
+				  {'strengths': [3, 3, 3], 'trees': 3}]
+
+var testTrials = [{"strengths": [1, 1, 1], "trees": 2},
+			      {"strengths": [3, 3, 1], "trees": 3}, 
+			      {"strengths": [2, 3, 2], "trees": 3},
+			      {"strengths": [3, 3, 1], "trees": 1},
+			      {"strengths": [3, 3, 3], "trees": 1},
+			      {"strengths": [2, 1, 3], "trees": 3},
+			      {"strengths": [3, 1, 3], "trees": 1},
+			      {"strengths": [2, 2, 2], "trees": 3},
+			      {"strengths": [1, 2, 2], "trees": 3},
+			      {"strengths": [2, 1, 3], "trees": 1},
+			      {"strengths": [2, 2, 3], "trees": 1},
+			      {"strengths": [1, 1, 1], "trees": 1},
+			      {"strengths": [2, 2, 2], "trees": 1},
+			      {"strengths": [3, 2, 3], "trees": 2},
+			      {"strengths": [2, 1, 1], "trees": 3},
+			      {"n_solutions": 3, "max_payoff": 6.0, "strengths": [3, 3, 3], "trees": 3},
+			      {"n_solutions": 2, "max_payoff": 5.0, "strengths": [2, 3, 3], "trees": 3},
+			      {"n_solutions": 1, "max_payoff": 5.0, "strengths": [3, 1, 2], "trees": 1},
+			      {"n_solutions": 1, "max_payoff": 6.0, "strengths": [2, 3, 3], "trees": 1},
+			      {"n_solutions": 3, "max_payoff": 4.0, "strengths": [2, 2, 2], "trees": 2},
+			      {"n_solutions": 2, "max_payoff": 5.0, "strengths": [2, 3, 2], "trees": 2},
+			      {"n_solutions": 3, "max_payoff": 6.0, "strengths": [3, 3, 3], "trees": 2},
+			      {"n_solutions": 1, "max_payoff": 3.0, "strengths": [1, 3, 1], "trees": 2},
+			      {"n_solutions": 2, "max_payoff": 4.0, "strengths": [3, 3, 1], "trees": 2}]
+
+// Action selection model
+var uobAgent = function(state, beliefs, agent) {
+	return Infer({method: 'enumerate'}, function(){
+		var actions = map(function(b){return actionPrior(b)}, beliefs);
+
+		condition(isOptimal(state, actions))
+
+		return actions[agent]
+	})
+}
+
+// Action prediction model
+var uobPrediction = function(state, beliefs) {
+	return Infer({method: 'enumerate'}, function(){
+		var actions = map(function(b){return actionPrior(b)}, beliefs);
+
+		condition(isOptimal(state, actions))
+
+		return actions
+	})
+}
+
+// Evaluation function
+var uobEval = function(state, beliefs) {
+	var actions = map(function(a){
+		return sample(uobAgent(state, beliefs, a))
+	}, _.range(3))
+
+	return actions
+}
+
+// Transition function
+var uobTransition = function(state, actions, trials) {
+	// Get trial number
+	var trialNo = _.indexOf(trials, state)
+	var maxTrials = trials.length - 1
+
+	// Evaluate outcome
+	var check = isOptimal(state, actions)
+
+	if (trialNo < maxTrials) {
+		return check ? trialNo + 1 : trialNo
+	} else {
+		return check ? 'end' : trialNo
+	}
+
+}
+
+// Update beliefs
+var updateBeliefs = function(state, actions, beliefs, alpha) {
+	// Convert actions to binary vector
+	var observation = convertActions(actions)
+
+	// Generate expectation over actions
+	var predictedDistro = uobPrediction(state, beliefs)
+	var expectation = distToMat(predictedDistro)
+
+	// Calculate individual action probabilities
+	var expectedAction = vmMult(mTranspose(expectation['actions']), expectation['prob'])
+
+	var pAction = vNorm(expectedAction)
+
+	// Calculate prediction error
+	var predictionErr = scalarMult(vSub(observation, pAction), alpha)
+
+	// Update actions priors
+	var newBelief = vAdd(beliefs, predictionErr)
+	console.log(newBelief)
+
+	return newBelief
+}
+
+// Run simulation
+var simulate = function(trials, initBeliefs, alpha) {
+
+	var sampleSequence = function(state, beliefs) {
+		var actions = uobEval(state, beliefs)
+		var newBeliefs = updateBeliefs(state, actions, beliefs, alpha)
+
+		var output = [[state, actions, newBeliefs]]
+
+		var newState = uobTransition(state, actions, trials)
+
+		if (newState == 'end') {
+			return output
+		} else {
+			return output.concat(sampleSequence(trials[newState], newBeliefs))
+		}
+	}
+
+	return sampleSequence(trials[0], initBeliefs)
+}
+
+
+simulate(testTrials, [0.5, 0.5, 0.5], 0.01)
