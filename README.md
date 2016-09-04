@@ -1,7 +1,9 @@
 # Fishermen Game
 Natalia Vélez, Kelsey Allen
 
-This git repository contains all files and code for the multi-player, in-person fisherman game, created for the CBMM 2016 Summer School.
+This git repository contains all files and code for the multi-player, in-person fisherman game, created for the CBMM 2016 Summer School. 
+
+This is an extension of Kelsey Allen's one-shot fisherman game; you can read more about the original experiment [here](http://www.academia.edu/download/38238919/Go_fishing_Responsibility_judgments_when_cooperation_breaks_down__Allen_et_al.__2015.pdf).
 
 ## Highlights:
 

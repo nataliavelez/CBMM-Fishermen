@@ -74,10 +74,30 @@ for (f in 1:length(data_files)) {
 ## Performance
 By request, I've counted the number of trials it took each group to finish the task. The 'best' group is the one that finished the whole task in the fewest tries (24 minimum).
 ```{r Best group}
+team_identities = c('Mixed', 'Mixed', 'Mixed', 'Single', 'Single', 'Single', 'Mixed', 'Single', 'Single', 'Mixed')
+team_identities = ifelse(team_identities == "Mixed", "Mixed gender", "Single gender")
+
 best_group = fishing_data %>%
   group_by(team) %>%
   summarise(n_trials = length(trial_no)) %>%
+  mutate(team_type = team_identities[team]) %>%
   arrange(n_trials)
+
+gender_differences = best_group %>%
+  group_by(team_type) %>%
+  summarise(avg_time = mean(n_trials),
+            se_time = se(n_trials))
+
+ggplot(gender_differences, aes(x = team_type, y = avg_time, fill = team_type)) +
+  geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin = avg_time - se_time, ymax = avg_time + se_time), width = 0.1) +
+  guides(fill = F) +
+  xlab('Team type') +
+  ylab('Total number of attempts') +
+  theme_bw(base_size = 18) +
+  theme(axis.text = element_text(size = 18),
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 18))
 ```
 
 Now, below, here is a more fine-grained analysis of human performance. The plot generated at the end shows the average number of attempts, across all groups, for each type of trial on each block. (Remember: each block contains one of each kind of trial.)
@@ -130,6 +150,7 @@ ggplot(filtered_tbb, aes(x = block, y = avg_time, group = category, color = cate
   #geom_errorbar(aes(ymin = avg_time - se_time, ymax = avg_time + se_time), width = 0.1) +
   xlab("Block") +
   ylab("Number of attempts") +
+  ggtitle("Human performance\nn = 9 triads (27 unique participants)") +
   theme_bw(base_size = 14) +
   theme(axis.text = element_text(size = 14),
         axis.title = element_text(size = 14),
@@ -179,5 +200,5 @@ ggplot(simulation_by_block, aes(x = block, y = avg_time, group = n_solutions, co
   scale_color_manual("Trial type",
                      labels = c('One solution', 'Two solutions', 'Three solutions'),
                      values = c('#57b8dd', '#ecc110', '#d84f4f')) +
-  ggtitle('Model output\nalpha = 0.1, temperature = 2.5, depth = 2')
+  ggtitle('Model output\nalpha = 0.1, temperature = 2.5, depth = 0')
 ```
