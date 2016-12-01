@@ -11,7 +11,6 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-
 ```
 
 ## Human performance
@@ -74,6 +73,8 @@ for (f in 1:length(data_files)) {
 ## Performance
 By request, I've counted the number of trials it took each group to finish the task. The 'best' group is the one that finished the whole task in the fewest tries (24 minimum).
 ```{r Best group}
+se <- function(x){return(sd(x)/sqrt(length(x)))}
+
 team_identities = c('Mixed', 'Mixed', 'Mixed', 'Single', 'Single', 'Single', 'Mixed', 'Single', 'Single', 'Mixed')
 team_identities = ifelse(team_identities == "Mixed", "Mixed gender", "Single gender")
 
@@ -101,9 +102,8 @@ ggplot(gender_differences, aes(x = team_type, y = avg_time, fill = team_type)) +
 ```
 
 Now, below, here is a more fine-grained analysis of human performance. The plot generated at the end shows the average number of attempts, across all groups, for each type of trial on each block. (Remember: each block contains one of each kind of trial.)
-```{r Performance summary}
-se <- function(x){return(sd(x)/sqrt(length(x)))}
 
+```{r Performance summary}
 # Refactor raw data according to # of attempts
 time_to_criterion = fishing_data %>%
   group_by(team, n_solutions, trial_no) %>%
@@ -200,5 +200,5 @@ ggplot(simulation_by_block, aes(x = block, y = avg_time, group = n_solutions, co
   scale_color_manual("Trial type",
                      labels = c('One solution', 'Two solutions', 'Three solutions'),
                      values = c('#57b8dd', '#ecc110', '#d84f4f')) +
-  ggtitle('Model output\nalpha = 0.1, temperature = 2.5, depth = 0')
+  ggtitle('Model output\nalpha = 0.1, temperature = 2.5, depth = 3')
 ```
