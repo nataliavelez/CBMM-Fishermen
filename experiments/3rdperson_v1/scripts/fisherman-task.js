@@ -2,6 +2,7 @@ $(document).ready(function(){
     template_html = {
         attn_check: $('#attn-check').html(),
         begin_blame: $('#begin-blame').html(),
+        oops: $('#oops').html()
     };
     
     $('#templates').hide();
@@ -11,15 +12,50 @@ $(document).ready(function(){
     
     // Preload images
     var trial_images = _.pluck(trial_order, 'img');
-    var instruction_images = _.map(_.range(1,21), function(i){
-        return 'images/instructions/{0}.jpg'.format(i)
-    });
+    var instruction_images = formatArray(_.range(1,21), 'images/instructions/{0}.jpg');
     
     var all_images = trial_images.concat(instruction_images);
     _.map(all_images, preloadImage);
     
     // ———————— ASSEMBLE TIMELINE ————————— //
+    // Basic instructions pages
+    var instructions_timeline = {
+        type: 'instructions',
+        pages: formatArray(instruction_images, '<img class = "instruction" src = "{0}" />'),
+        allow_keys: false,
+        show_clickable_nav: true
+    };
     
+    
+    // Attention check
+    var attn_check = {
+        type: 'attn_check',
+        text: template_html['attn_check']
+    };
+    
+    // Oops! screen is hown if participant makes a mistake on the attention check
+    var oops = {
+        type: 'text-with-button',
+        text: template_html['oops']
+    };
+    
+    var oops_node = {
+        timeline: [oops],
+        conditional_function(){
+            var data = jsPsych.data.getLastTrialData();
+            exp.tutorial_attempts += !(data.all_correct);
+            return !(data.all_correct) 
+        }
+    }
+    
+    // Instructions loop through if participant makes a mistake on the attention check 
+    var loop_instructions = {
+        timeline: instructions_timeline.concat(attn_check, oops_node),
+        loop_function: function(data){
+            console.log(data.type)
+            return data.type === 'oops'
+        }
+    };
     
     
     // ———————— INITIALIZE TASK ————————— //

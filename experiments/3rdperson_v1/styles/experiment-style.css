@@ -99,20 +99,39 @@ button {
 
 /* ——————————————————— FISHERMEN ——————————————————— */
 .village-container {
+    display: inline-block;
     position: relative;
+    width: 600px;
 }
 
 .fishing-village {
-    width: 50%;
+    width: 600px;
     display: block;
     margin: 0 auto;
 }
 
+.village-banner {
+    table-layout: fixed;
+    width: 600px;
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0;
+    background: #9c6fa1;
+    color: #fff;
+    font-weight: bold;    
+}
+
+.village-banner td {
+    width: 300px;
+}
+
 .announce {
-    display: inline-block;
+    position: absolute;
+    background: #fff;
+    right: 5px;
+    bottom: 5px;
     padding: 10px;
     width: 200px;
-    border: 2px solid #bbb;
     text-align: left;
 }
 
@@ -122,10 +141,18 @@ button {
     padding: 10px 25px;
 }
 
-.blame-container {
+.blame-container, .action-container {
     display: inline-block;
     width: 1050px;
     margin: 0 auto;
+}
+
+.blame-slider ul li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 120px;
+    float: left;
 }
 
 /* ——————————————————— SURVEY ——————————————————— */

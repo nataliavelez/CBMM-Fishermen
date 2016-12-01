@@ -27,6 +27,7 @@ exp = {max_trees: 3,
        max_str: 3,
        n_trials: 2,
        optimum_trials: [true, false],
+       tutorial_attempts: 1,
        first_trial: _.sample([1,2,3]),
        iti: 1500};
 

@@ -12,6 +12,14 @@ if (!String.prototype.format) {
   };
 }
 
+// Applies same formatting to each element in an array
+// (NOTE: Doesn't work with nested arrays yet, so there can only be one blank in the template)
+function formatArray(arr, template) {
+    return _.map(arr, function(e){
+        return template.format(e)
+    });
+}
+
 // Preload images
 function preloadImage(fname) {
     new Image().src = fname;

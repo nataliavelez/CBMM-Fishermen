@@ -8,16 +8,16 @@
         <script src="_shared/js/underscore-min.js"></script>
         <script src="_shared/js/jquery-1.11.1.min.js"></script>
         <script src="jspsych/jspsych.js"></script>
-        <script src ="jspsych/plugins/jspsych-html.js"></script>
-        <script src="jspsych/plugins/jspsych-text.js"></script>
-        <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
-        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
-        <script src="jspsych/plugins/jspsych-single-stim.js"></script>
+        <script src="jspsych/plugins/jspsych-instructions.js"></script>
     
         <!-- CocoLab utilities -->
         <script src = '_shared/js/underscore-min.js'></script>
         <script src = '_shared/js/mmturkey.js'></script>
         <script src = '_shared/js/browser.detect.js'></script>
+        
+        <!-- Homemade plugins -->
+        <script src = 'scripts/user-plugins/text-with-button.js'></script>
+        
         
         <!-- Experiment-specific scripts -->
         <script src = 'scripts/utils.js'></script>
@@ -75,7 +75,15 @@
                 </select>
             </p>
             
+            <button class = "continue-inactive">Continue</button>
         </div>
+            
+        <div class = "slide" id = "retry-instructions">
+            <h1>Uh-oh!</h1>
+            <p>It looks like you answered a question incorrectly. We'll show you the instructions again, just in case.</p>
+            
+            <button class = "continue-active">Try again</button>
+            </div>
         
         <div class = "slide" id = "begin-blame">
             <h1>Let's get started!</h1>
@@ -86,13 +94,56 @@
             <button class = "continue-active">Continue</button>
         </div>
         
+        <div class = "slide" id = "action-check">
+            <h1>What did each fisherman do?</h1>
+            
+            <div class = "village-container">
+                <table class = "village-banner"><tr><td>Village {0}/12</td><td>Day 1/2</td></tr></table>
+            <img class = "fishing-village" src = "images/blame_stim/3_a3b1c2_a1b0c0.jpg" />
+                 <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
+            <strong>Maximum amount:</strong> {2}</p></div>
+            </div>
+            
+            
+            <div class = "action-container">
+            
+                <div class = "blame-slider">
+                    <h3>Fisherman A</h3>
+                    <ul>
+                    <li><input type = "radio" name = "action-a" value = "tree" />Clear <strong>trees</strong></li>
+                    <li><input type = "radio" name = "action-a" value = "fish" />Catch <strong>fish</strong></li>
+                    </ul>
+                </div>
+                
+                <div class = "blame-slider">
+                    <h3>Fisherman B</h3>
+                    <ul>
+                    <li><input type = "radio" name = "action-b" value = "tree" />Clear <strong>trees</strong></li>
+                    <li><input type = "radio" name = "action-b" value = "fish" />Catch <strong>fish</strong></li>
+                    </ul>
+                </div>
+                
+                <div class = "blame-slider">
+                    <h3>Fisherman C</h3>
+                    <ul>
+                    <li><input type = "radio" name = "action-c" value = "tree" />Clear <strong>trees</strong></li>
+                    <li><input type = "radio" name = "action-c" value = "fish" />Catch <strong>fish</strong></li>
+                    </ul>
+                </div>
+                </div>
+            
+            <button class = "continue-inactive">Continue</button>
+            
+        </div>
+        
         <div class = "slide" id = "blame-attr">
             <h1>How much is each fisherman to blame for the outcome?</h1>
             
             <div class = "village-container">
+                <table class = "village-banner"><tr><td>Village {0}/12</td><td>Day 2/2</td></tr></table>
             <img class = "fishing-village" src = "images/blame_stim/3_a3b1c2_a1b0c0.jpg" />
-                 <div class = "announce"><p><strong>Total fish caught:</strong> {0}<br />
-            <strong>Maximum amount:</strong> {1}</p></div>
+                 <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
+            <strong>Maximum amount:</strong> {2}</p></div>
             </div>
             
             
@@ -125,7 +176,7 @@
         </div>
         </div>
         
-        <div id = "thanks">
+        <div class = "slide" id = "thanks">
             <h1>Thanks for participating in our HIT!</h1>
             <p>Submitting data, please do not close the page...</p>
         </div>
