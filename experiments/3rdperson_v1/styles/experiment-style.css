@@ -39,11 +39,11 @@ button {
     color: #fbeedf;
 }
 
-.slide{
+.slide, #jspsych-display{
 	background-color: #FFF;
     padding: 20px;
     margin: 0 auto;
-    width: 75vw;
+    width: 100hw;
     min-height: 100vh;
     text-align: center;
 }
@@ -52,7 +52,7 @@ button {
     text-align: center;
 }
 
-.left-text {
+.left-text, #attn-check {
     text-align: left;
 }
 
@@ -98,14 +98,34 @@ button {
 }
 
 /* ——————————————————— FISHERMEN ——————————————————— */
-.fishing-village {
+.village-container {
     position: relative;
-    background-color: #b3d288;
 }
 
-.fisherman-container {
-    position: absolute;
-    width: 100px;
+.fishing-village {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.announce {
+    display: inline-block;
+    padding: 10px;
+    width: 200px;
+    border: 2px solid #bbb;
+    text-align: left;
+}
+
+.blame-slider {
+    width: 300px;
+    float: left;
+    padding: 10px 25px;
+}
+
+.blame-container {
+    display: inline-block;
+    width: 1050px;
+    margin: 0 auto;
 }
 
 /* ——————————————————— SURVEY ——————————————————— */

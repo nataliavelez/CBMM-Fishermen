@@ -2,13 +2,17 @@
 <html>
     <head>
         <title>Go Fish!</title>
+        
         <!-- External utilities -->
         <script src="_shared/js/jquery-1.11.1.min.js"></script>
         <script src="_shared/js/underscore-min.js"></script>
-        
-        <!-- cocolab experiment logic -->
-        <script src="_shared/js/exp-V2.js"></script>
-        <script src="_shared/js/stream-V2.js"></script>
+        <script src="_shared/js/jquery-1.11.1.min.js"></script>
+        <script src="jspsych/jspsych.js"></script>
+        <script src ="jspsych/plugins/jspsych-html.js"></script>
+        <script src="jspsych/plugins/jspsych-text.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych/plugins/jspsych-single-stim.js"></script>
     
         <!-- CocoLab utilities -->
         <script src = '_shared/js/underscore-min.js'></script>
@@ -16,6 +20,7 @@
         <script src = '_shared/js/browser.detect.js'></script>
         
         <!-- Experiment-specific scripts -->
+        <script src = 'scripts/utils.js'></script>
         <script src = 'scripts/counterbalancer.js'></script>
         <link href='styles/experiment-style.css' rel='stylesheet' type='text/css'></link>
     </head>
@@ -28,15 +33,16 @@
 
         <p class="legal">This HIT is part of a scientific research project conducted by the Social Learning Lab at Stanford and has been approved by the IRB of Stanford University. Your decision to complete this HIT is voluntary. We will only have access to your worker ID and no other information to identify you. The only other information we will have, in addition to your response, is the time at which you completed the survey and the amount of time you spent to complete it. The results of the research may be presented at scientific meetings or published in scientific journals. Clicking on the ‘SUBMIT’ button on the bottom of this page indicates that you are at least 18 years of age, and agree to complete this HIT voluntarily.</p>
 
-        <p>In this HIT, you will be shown 32 concepts for movies. A previous participant has already gone through all of the movies and picked which movies they would rather watch. Your job is to figure out what this person likes!</p>
+        <p>TO-DO: (1) Write instructions, (2) Replace SLL IRB text with CoCoLab IRB text, (3) Get CoCoLab logo for header?</p>
 
-        <p>This HIT will be composed of two phases, in which you will complete two tasks:</p>
-        <img id = "flowchart" src='instructions/instructions_diagram.png' />
-
-        <p>The HIT should take 20 minutes. Please pay attention. Thanks!</p>
+        <p>The HIT should take 2-3 minutes. Please pay attention. Thanks!</p>
         <button id="start_button" type="button">Start Experiment</button>
         </div>
         
+        
+        <div id = "jspsych-target"></div>
+        
+        <div id = "templates">
         
         <div class = "slide" id = "attn-check">
             <h1>Pop quiz!</h1>
@@ -69,6 +75,59 @@
                 </select>
             </p>
             
+        </div>
+        
+        <div class = "slide" id = "begin-blame">
+            <h1>Let's get started!</h1>
+            <p>Sometimes, the fishermen could have gotten more fish if they had acted differently. We'll show you cases when this happened and you'll judge how much you think a specific fisherman is to blame. </p>
+            
+            <p><strong>Please make sure your web browser is maximized for the test trials.</strong></p>
+            
+            <button class = "continue-active">Continue</button>
+        </div>
+        
+        <div class = "slide" id = "blame-attr">
+            <h1>How much is each fisherman to blame for the outcome?</h1>
+            
+            <div class = "village-container">
+            <img class = "fishing-village" src = "images/blame_stim/3_a3b1c2_a1b0c0.jpg" />
+                 <div class = "announce"><p><strong>Total fish caught:</strong> {0}<br />
+            <strong>Maximum amount:</strong> {1}</p></div>
+            </div>
+            
+            
+            <div class = "blame-container">
+            
+                <div class = "blame-slider">
+                    <h3>Fisherman A</h3>
+                    <span class="min">Not at all</span>
+              <input type="range" name="slider" id="fisherman-a" value="0" min="0" max="100"  />
+                    <span class="max">Very much</span>
+                </div>
+
+                <div class = "blame-slider">
+                    <h3>Fisherman B</h3>
+                    <span class="min">Not at all</span>
+              <input type="range" name="slider" id="fisherman-b" value="0" min="0" max="100"  />
+                    <span class="max">Very much</span>
+                </div>
+
+                <div class = "blame-slider">
+                    <h3>Fisherman C</h3>
+                    <span class="min">Not at all</span>
+              <input type="range" name="slider" id="fisherman-c" value="0" min="0" max="100"  />
+                    <span class="max">Very much</span>
+                </div>
+                </div>
+            
+            <button class = "continue-inactive">Continue</button>
+            
+        </div>
+        </div>
+        
+        <div id = "thanks">
+            <h1>Thanks for participating in our HIT!</h1>
+            <p>Submitting data, please do not close the page...</p>
         </div>
         
     </body>

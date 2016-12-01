@@ -76,15 +76,28 @@ function get_payoff(state, actions) {
 function get_all_payoffs(state) {
     // Get all actions and payoffs
     var all_actions = combinations(3);
+    
+    var get_img_url = function(action) {
+        var template_str = 'images/blame_stim/{0}_a{1}b{2}b{3}_a{4}b{5}c{6}.jpg'
+        return template_str.format(state.trees,
+                                  state.str[0],
+                                  state.str[1],
+                                  state.str[2],
+                                  +action[0],
+                                  +action[1],
+                                  +action[2]);
+    }
+    
     var payoffs = _.map(all_actions, function(e) {
         return {action: e,
-               payoff: get_payoff(state, e)}
+                img: get_img_url(e),
+                payoff: get_payoff(state, e)}
     });
     
     // Tag each action according to whether it's optimal
     var max_payoff = _.max(_.pluck(payoffs, 'payoff'));
     payoffs = _.map(payoffs, function(e) {
-        return $.extend(e, {is_optimal: e.payoff == max_payoff})
+        return $.extend(e, {is_optimal: e.payoff == max_payoff, max_payoff: max_payoff})
     });
     
     return payoffs
