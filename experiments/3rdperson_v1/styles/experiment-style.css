@@ -50,6 +50,7 @@ button {
 
 #jspsych-target {
     text-align: center;
+    position: relative;
 }
 
 .left-text, #attn-check {
@@ -81,7 +82,7 @@ button {
     text-align: center;
 }
 
-#i0, #attn-chck, #survey {
+#i0, #attn-chck, #sll-survey {
 	width: 1000px;
 	margin: 0 auto;
     text-align: left;
@@ -95,6 +96,37 @@ button {
 	background-color: #FFEE9F;
 	border-radius: 10px;
 	
+}
+
+.instruction {
+    width: 700px;
+}
+
+.attn-q {
+    list-style: none;
+}
+
+.attn-q.linear li {
+    float: left;
+    padding: 0px 20px 20px 0px;
+}
+
+.warning {
+    text-align: center;
+    font-size: 14pt;
+    color: #999;
+}
+
+/* ——————————————————— TUTORIAL ——————————————————— */
+#jspsych-instructions-back, #jspsych-instructions-next, .neutral-button {
+    background: #fff;
+    border: 3px solid #ccc;
+}
+
+#jspsych-instructions-back, #jspsych-instructions-next {
+    clear: none;
+    display: inline-block;
+    margin: 0 10px;   
 }
 
 /* ——————————————————— FISHERMEN ——————————————————— */

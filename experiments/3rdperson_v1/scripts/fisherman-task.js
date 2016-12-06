@@ -17,19 +17,24 @@ $(document).ready(function(){
     var all_images = trial_images.concat(instruction_images);
     _.map(all_images, preloadImage);
     
-    // ———————— ASSEMBLE TIMELINE ————————— //
+    // ———————— TUTORIAL TIMELINE ————————— //
     // Basic instructions pages
+    var instructions_template = _.map(_.range(1,21), function(i) {
+        var raw_template = '<p>Instructions: {0}/20</p><img class = "instruction" src = "{1}" />';
+        return raw_template.format(i, instruction_images[i-1])
+    })
+    
     var instructions_timeline = {
         type: 'instructions',
-        pages: formatArray(instruction_images, '<img class = "instruction" src = "{0}" />'),
+        pages: instructions_template,
         allow_keys: false,
         show_clickable_nav: true
     };
-    
+        
     
     // Attention check
     var attn_check = {
-        type: 'attn_check',
+        type: 'attn-check',
         text: template_html['attn_check']
     };
     
@@ -43,20 +48,32 @@ $(document).ready(function(){
         timeline: [oops],
         conditional_function(){
             var data = jsPsych.data.getLastTrialData();
-            exp.tutorial_attempts += !(data.all_correct);
+            console.log(!(data.all_correct))
+            
+            exp.passed_tutorial = data.all_correct;
+
             return !(data.all_correct) 
         }
     }
     
     // Instructions loop through if participant makes a mistake on the attention check 
     var loop_instructions = {
-        timeline: instructions_timeline.concat(attn_check, oops_node),
-        loop_function: function(data){
-            console.log(data.type)
-            return data.type === 'oops'
+        timeline: [instructions_timeline, attn_check, oops_node],
+        loop_function: function(){
+            console.log('Evaluating loop...')
+            console.log(exp.passed_tutorial)
+            exp.tutorial_attempts += 1
+            
+            return !(exp.passed_tutorial)
         }
     };
     
+    // ———————— MAIN TASK ————————— //
+    
+    var sll_survey = {
+        type: 'sll-survey'
+    }
+
     
     // ———————— INITIALIZE TASK ————————— //
     $('#start').click(function(){
@@ -64,16 +81,16 @@ $(document).ready(function(){
         if (!turk.previewMode) {
             
         // Hide consent form, show experiment
-        $('#i0-wrapper').hide();
+        $('#i0').hide();
         $('#jspsych-target').show();
         
         // Starts experiment
         jsPsych.init({
-            timeline: experiment_timeline,
+            timeline: [loop_instructions],
             display_element: $('#jspsych-target'),
             default_iti: exp.pause_after_trial,
             fullscreen: false,
-            show_progress_bar: true,
+            show_progress_bar: false,
             on_trial_start: function(){
                 $('body').scrollTop(0);
             },

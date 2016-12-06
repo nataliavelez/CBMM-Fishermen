@@ -23,14 +23,6 @@ iti
     Inter-trial interval, in ms
 */
 
-exp = {max_trees: 3,
-       max_str: 3,
-       n_trials: 2,
-       optimum_trials: [true, false],
-       tutorial_attempts: 1,
-       first_trial: _.sample([1,2,3]),
-       iti: 1500};
-
 // STEP 2: CREATE ALL POSSIBLE SCENARIOS
 // Helper functions: return all possible actions
 Number.prototype.times = function(fn) {
@@ -79,7 +71,7 @@ function get_all_payoffs(state) {
     var all_actions = combinations(3);
     
     var get_img_url = function(action) {
-        var template_str = 'images/blame_stim/{0}_a{1}b{2}b{3}_a{4}b{5}c{6}.jpg'
+        var template_str = 'images/blame_stim/{0}_a{1}b{2}c{3}_a{4}b{5}c{6}.jpg'
         return template_str.format(state.trees,
                                   state.str[0],
                                   state.str[1],
