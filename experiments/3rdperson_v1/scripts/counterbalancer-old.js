@@ -1,31 +1,19 @@
-/*
-STEP 1: EXPERIMENT CONFIGURATION
-
-Options:
-max_trees, max_str
-    [numeric]
-    The maximum number of trees and stregth per fishermen, respectively.
-    
-n_trials
-    [obs]
-    Number of observations per subject
-
-optimum_trials
-    [array]
-    Must have as many elements as there are trials in n_trials. True if fishermen act optimally.
-    
-first_trial
-    [numeric]
-    The type of trial to be displayed first
-
-iti
-    [numeric]
-    Inter-trial interval, in ms
-*/
-
-// STEP 2: CREATE ALL POSSIBLE SCENARIOS
+// CREATE ALL POSSIBLE SCENARIOS
 // Helper functions: return all possible actions
+Number.prototype.times = function(fn) {
+  var r = [];
+  for(var i = 0; i < this; i++)
+    r.push(fn(i));
+  return r;
+}
 
+function combinations(n) {
+  return (1 << n).times(function(i) {
+    return n.times(function(j) {
+      return Boolean(i & 1 << j);
+    });
+  });
+}
 
 // Helper function: calculate payoff
 // state is an object with the following keys:
@@ -109,23 +97,15 @@ for (t = 1; t < exp.max_trees+1; t++){
 
 scenario_groups = _.groupBy(all_scenarios, function(e){return e.n_soln});
 
-// GET BLOCK ORDER
-var block_order = repeatArray([1,2,3], exp.n_villages/3, true);
-
 // SAMPLE TRIALS
 trial_order = [];
 
-for (i = 0; i < exp.n_villages; i++) {
-    tmp_trials = [];
-    
-    for (t = 0; t < exp.optimum_trials.length; t++) {
-        var t =  _.sample(scenario_groups[exp.block_order[i][t]]);
-        var t_payoffs = get_all_payoffs(t);
-        var t_actions = _.filter(t_payoffs, function(e) { return exp.optimum_trials[t] ? e.is_optimal : !(e.is_optimal) });
-        
-        t_info = $.extend(t, _.sample(t_actions), {type: 'fisherman-game'});
-        tmp_trials.push(t_info);
-    }
-    
-    trial_order.push(tmp_trials)
-}
+var t1 = _.sample(scenario_groups[exp.first_trial]);
+var t1_payoffs = get_all_payoffs(t1);
+var t1_actions = _.filter(t1_payoffs, function (e) {return e.is_optimal});
+trial_order.push($.extend(t1, _.sample(t1_actions), {type: 'fisherman-game'}));
+
+var t2 = _.sample(scenario_groups[3]);
+var t2_payoffs = get_all_payoffs(t2);
+var t2_actions = _.filter(t2_payoffs, function (e) {return !(e.is_optimal)});
+trial_order.push($.extend(t2, _.sample(t2_actions), {type: 'fisherman-game'}));
