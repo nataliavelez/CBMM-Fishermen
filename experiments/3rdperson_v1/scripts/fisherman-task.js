@@ -35,7 +35,7 @@ $(document).ready(function(){
         text: template_html['attn_check']
     };
     
-    // Oops! screen is hown if participant makes a mistake on the attention check
+    // Oops! screen is shown if participant makes a mistake on the attention check
     var oops = {
         type: 'text-with-button',
         text: template_html['oops']
@@ -67,39 +67,14 @@ $(document).ready(function(){
     
     // ———————— MAIN TASK ————————— //
     // Assemble trials
-    var fishermen_timeline = [];
-    var trial_types = ['action-check', 'blame-attr'];
-
-    for (i = 0; i < exp.n_villages; i++) {
-        // Announce new block
-        fishermen_timeline.push({type: 'new-village',
-                                text: template_html['new_village'],
-                                village: i+1,
-                                color: village_colors[i]});
-
-        for (t = 0; t < exp.optimum_trials.length; t++) {
-            var eligible_trials = scenario_groups[village_order[i][t]];
-            var current_trial = _.sample(eligible_trials);
-
-            var current_payoffs = get_all_payoffs(current_trial);
-            var all_actions = _.filter(current_payoffs, function(e) { return exp.optimum_trials[t] ? e.is_optimal : !(e.is_optimal) });
-            var current_action = _.sample(all_actions)
-
-            var trial_info = {type: trial_types[t],
-                              text: template_html[trial_types[t].replace('-', '_')],
-                              color: village_colors[i],
-                              village: i+1};
-            
-            current_trial = $.extend(current_trial, current_action, trial_info);
-            preloadImage(current_trial.img);
-            
-            fishermen_timeline.push(current_trial);
-        }
-
-    }
-    
-    // Debugging only—check full fishermen timeline!
-    console.log(fishermen_timeline);
+    fishermen_timeline = _.map(trial_order, function(e){
+        var template_type = e.type.replace('-', '_');
+        e.text = template_html[template_type];
+        
+        preloadImage(e.img);
+        
+        return e
+    });
 
     // Final survey (optional)
     var sll_survey = {
@@ -107,10 +82,6 @@ $(document).ready(function(){
     }
     
     var experiment_timeline = [loop_instructions].concat(fishermen_timeline, [sll_survey]);
-    
-    // Debugging only–check full experiment timeline!
-    console.log(experiment_timeline);
-
 
     // ———————— INITIALIZE TASK ————————— //
     $('#start').click(function(){
@@ -123,7 +94,7 @@ $(document).ready(function(){
         
         // Starts experiment
         jsPsych.init({
-            timeline: fishermen_timeline,
+            timeline: experiment_timeline,
             display_element: $('#jspsych-target'),
             default_iti: exp.pause_after_trial,
             fullscreen: false,
@@ -142,7 +113,7 @@ $(document).ready(function(){
                     time_in_minutes: lastTrial['time_elapsed']/1000/60,
                     system: {
                         browser: BrowserDetect.browser,
-                        OS: BrowserDetect.OS,
+                        OS: BrowserDetect.OS,   
                         width: $(window).width(),
                         height: $(window).height()
                     },

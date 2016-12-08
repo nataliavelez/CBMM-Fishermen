@@ -8,7 +8,10 @@ jsPsych.plugins['action-check'] = (function(){
       
       // If any arguments to trial are functions, evaluate them!
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-      var page_content = trial.text.format(trial.village, trial.payoff, trial.max_payoff, trial.img, exp.n_villages);
+      
+      // Fill in page content
+      console.log(trial)
+      var page_content = trial.text.format(trial.village, exp.n_villages, trial.img, trial.payoff, trial.max_payoff);
       display_element.html(page_content);
       display_element.find('.village-banner').css('background', trial.color);
       

@@ -137,12 +137,13 @@
         
         <div class = "slide" id = "action-check">
             <h1>What did each fisherman do?</h1>
+            <p>(Please answer all three questions before continuing.)</p>
             
             <div class = "village-container">
-                <table class = "village-banner"><tr><td>Village {0}/{4}</td><td>Day 1/2</td></tr></table>
-            <img class = "fishing-village" src = "{3}" />
-                 <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
-            <strong>Maximum amount:</strong> {2}</p></div>
+                <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 1/2</td></tr></table>
+            <img class = "fishing-village" src = "{2}" />
+                 <div class = "announce"><p><strong>Total fish caught:</strong> {3}<br />
+            <strong>Maximum amount:</strong> {4}</p></div>
             </div>
             
             
@@ -179,12 +180,13 @@
         
         <div class = "slide" id = "blame-attr">
             <h1>How much is each fisherman to blame for the outcome?</h1>
+            <p>(Please adjust all three sliders before continuing.)</p>
             
             <div class = "village-container">
-                <table class = "village-banner"><tr><td>Village {0}/{4}</td><td>Day 2/2</td></tr></table>
-            <img class = "fishing-village" src = "{3}"/>
-                 <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
-            <strong>Maximum amount:</strong> {2}</p></div>
+                <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 2/2</td></tr></table>
+            <img class = "fishing-village" src = "{2}"/>
+                 <div class = "announce"><p><strong>Total fish caught:</strong> {3}<br />
+            <strong>Maximum amount:</strong> {4}</p></div>
             </div>
             
             
@@ -193,21 +195,21 @@
                 <div class = "blame-slider">
                     <h3>Fisherman A</h3>
                     <span class="min">Not at all</span>
-              <input type="range" name="slider" id="fisherman-a" adjusted="false" value="0" min="0" max="100"  />
+              <input type="range" name="slider" id="fisherman-a" adjusted="false" value="50" min="0" max="100"  />
                     <span class="max">Very much</span>
                 </div>
 
                 <div class = "blame-slider">
                     <h3>Fisherman B</h3>
                     <span class="min">Not at all</span>
-              <input type="range" name="slider" id="fisherman-b" adjusted="false" value="0" min="0" max="100"  />
+              <input type="range" name="slider" id="fisherman-b" adjusted="false" value="50" min="0" max="100"  />
                     <span class="max">Very much</span>
                 </div>
 
                 <div class = "blame-slider">
                     <h3>Fisherman C</h3>
                     <span class="min">Not at all</span>
-              <input type="range" name="slider" id="fisherman-c" adjusted="false" value="0" min="0" max="100"  />
+              <input type="range" name="slider" id="fisherman-c" adjusted="false" value="50" min="0" max="100"  />
                     <span class="max">Very much</span>
                 </div>
                 </div>
@@ -217,6 +219,7 @@
         </div>
             
         <div class="slide" id = "sll-survey">
+            <div class = "left-text">
         <h1>Almost done!</h1>
       <p class="info">Answering these questions is optional, but will help us understand your answers.</p>
       <p>Did you read the instructions and do you think you did the HIT correctly?</p>
@@ -261,6 +264,8 @@
       <textarea class="comments" rows="3" cols="50"></textarea>
       <br/>
       <button class = "submit">Submit</button>
+                
+                </div>
 </div>    
         
         </div>

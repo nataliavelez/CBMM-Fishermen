@@ -26,7 +26,7 @@ iti
 
 exp = {max_trees: 3,
        max_str: 3,
-       n_villages: 27,
+       n_villages: 6,
        n_trials: 2,
        optimum_trials: [true, false],
        passed_tutorial: false,

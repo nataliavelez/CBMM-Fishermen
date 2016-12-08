@@ -85,13 +85,47 @@ scenario_groups = _.groupBy(all_scenarios, function(e){return e.n_soln});
 n_groups = _.keys(scenario_groups).length;
 
 // ——————— STEP 2: CREATE VILLAGE ORDER ——————— //
-var village_types = [];
-
-for (i = 1; i < n_groups+1; i++) {
-    for (j = 1; j < n_groups+1; j++) {
-        village_types.push([i,j]);
-    }
-}
+var village_types = _.map(_.range(1,4), function(i){return [i, 3]});
 
 var village_order = repeatArray(village_types, exp.n_villages/village_types.length, false);
 var village_order = _.shuffle(village_order);
+
+// ——————— STEP 3: CREATE TRIAL ORDER ——————— //
+var trial_counts = _.countBy(_.flatten(village_order)); // Number of scenarios needed from each group
+
+// Sample n scenarios from each group
+var eligible_scenarios = _.map(_.keys(scenario_groups), function(k){
+    return _.sample(scenario_groups[k], trial_counts[k])
+});
+
+var eligible_scenarios = _.object(_.keys(scenario_groups), eligible_scenarios);
+
+// Assemble trial order
+var trial_order = []
+for (i = 0; i < village_order.length; i++) {
+    trial_order.push({type: 'new-village',
+                     village: i+1,
+                     color: village_colors[i]});
+    
+    for (t = 0; t < village_order[i].length; t++) {
+        // Get trial
+        trial_type = village_order[i][t];
+        current_state = eligible_scenarios[trial_type].pop();
+        is_optimal = exp.optimum_trials[t];
+        
+        // Sample action
+        all_actions = get_all_payoffs(current_state);
+        eligible_actions = _.filter(all_actions, function(a){
+            return a.is_optimal == is_optimal
+        });
+        current_action = _.sample(eligible_actions);
+        
+        // Add trial information
+        current_trial = $.extend({}, current_state, current_action);
+        current_trial.color = village_colors[i];
+        current_trial.village = i+1;
+        current_trial.type = t == 0 ? 'action-check' : 'blame-attr';
+        
+        trial_order.push(current_trial)
+    }
+}
