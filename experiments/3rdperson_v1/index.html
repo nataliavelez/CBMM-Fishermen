@@ -24,10 +24,11 @@
         <script src = 'scripts/user-plugins/sll-survey.js'></script>
         
         <!-- Experiment-specific scripts -->
-        <script src = 'scripts/config.js'></script>
+        <script src = 'scripts/palette.js'></script>
         <script src = 'scripts/utils.js'></script>
+        <script src = 'scripts/config.js'></script>
         <script src = 'scripts/counterbalancer.js'></script>
-        <!-- <script src = 'scripts/fisherman-task.js'></script> -->
+        <script src = 'scripts/fisherman-task.js'></script>
         <link href='styles/experiment-style.css' rel='stylesheet' type='text/css'></link>
     </head>
 
@@ -138,8 +139,8 @@
             <h1>What did each fisherman do?</h1>
             
             <div class = "village-container">
-                <table class = "village-banner"><tr><td>Village {0}/12</td><td>Day 1/2</td></tr></table>
-            <img class = "fishing-village" src = "images/blame_stim/3_a3b1c2_a1b0c0.jpg" />
+                <table class = "village-banner"><tr><td>Village {0}/{4}</td><td>Day 1/2</td></tr></table>
+            <img class = "fishing-village" src = "{3}" />
                  <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
             <strong>Maximum amount:</strong> {2}</p></div>
             </div>
@@ -180,8 +181,8 @@
             <h1>How much is each fisherman to blame for the outcome?</h1>
             
             <div class = "village-container">
-                <table class = "village-banner"><tr><td>Village {0}/12</td><td>Day 2/2</td></tr></table>
-            <img class = "fishing-village" src = "images/blame_stim/3_a3b1c2_a1b0c0.jpg"/>
+                <table class = "village-banner"><tr><td>Village {0}/{4}</td><td>Day 2/2</td></tr></table>
+            <img class = "fishing-village" src = "{3}"/>
                  <div class = "announce"><p><strong>Total fish caught:</strong> {1}<br />
             <strong>Maximum amount:</strong> {2}</p></div>
             </div>

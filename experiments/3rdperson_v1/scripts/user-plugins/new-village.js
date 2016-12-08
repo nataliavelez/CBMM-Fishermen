@@ -7,12 +7,12 @@ jsPsych.plugins['new-village'] = (function(){
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
       
       display_element.html(trial.text);
-      display_element.css('background-color', trial.bg);
+      display_element.find('h1').css('color', trial.color);
       
       display_element.find('button').on('click', function(){
           $(this).off('click'); // Button should only respond once
           
-          display_element.css('background-color', '#ffffff');
+          display_element.find('h1').css('color', '#000000');
           display_element.html('');
           jsPsych.finishTrial();
       });

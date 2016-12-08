@@ -2,6 +2,9 @@ $(document).ready(function(){
     template_html = {
         attn_check: $('#attn-check').html(),
         begin_blame: $('#begin-blame').html(),
+        new_village: $('#new-village').html(),
+        action_check: $('#action-check').html(),
+        blame_attr: $('#blame-attr').html(),
         oops: $('#oops').html()
     };
     
@@ -9,16 +12,10 @@ $(document).ready(function(){
     $('#jspsych-target').hide();
     $('#thanks').hide();
     
-    
-    // Preload images
-    var trial_images = _.pluck(trial_order, 'img');
-    var instruction_images = formatArray(_.range(1,21), 'images/instructions/{0}.jpg');
-    
-    var all_images = trial_images.concat(instruction_images);
-    _.map(all_images, preloadImage);
-    
     // ———————— TUTORIAL TIMELINE ————————— //
     // Basic instructions pages
+     var instruction_images = formatArray(_.range(1,21), 'images/instructions/{0}.jpg');
+    
     var instructions_template = _.map(_.range(1,21), function(i) {
         var raw_template = '<p>Instructions: {0}/20</p><img class = "instruction" src = "{1}" />';
         return raw_template.format(i, instruction_images[i-1])
@@ -69,12 +66,52 @@ $(document).ready(function(){
     };
     
     // ———————— MAIN TASK ————————— //
+    // Assemble trials
+    var fishermen_timeline = [];
+    var trial_types = ['action-check', 'blame-attr'];
+
+    for (i = 0; i < exp.n_villages; i++) {
+        // Announce new block
+        fishermen_timeline.push({type: 'new-village',
+                                text: template_html['new_village'],
+                                village: i+1,
+                                color: village_colors[i]});
+
+        for (t = 0; t < exp.optimum_trials.length; t++) {
+            var eligible_trials = scenario_groups[village_order[i][t]];
+            var current_trial = _.sample(eligible_trials);
+
+            var current_payoffs = get_all_payoffs(current_trial);
+            var all_actions = _.filter(current_payoffs, function(e) { return exp.optimum_trials[t] ? e.is_optimal : !(e.is_optimal) });
+            var current_action = _.sample(all_actions)
+
+            var trial_info = {type: trial_types[t],
+                              text: template_html[trial_types[t].replace('-', '_')],
+                              color: village_colors[i],
+                              village: i+1};
+            
+            current_trial = $.extend(current_trial, current_action, trial_info);
+            preloadImage(current_trial.img);
+            
+            fishermen_timeline.push(current_trial);
+        }
+
+    }
     
+    // Debugging only—check full fishermen timeline!
+    console.log(fishermen_timeline);
+
+    // Final survey (optional)
     var sll_survey = {
         type: 'sll-survey'
     }
-
     
+    var experiment_timeline = [loop_instructions].concat(fishermen_timeline, [sll_survey]);
+    
+    // Debugging only–check full experiment timeline!
+    console.log(experiment_timeline);
+
+
     // ———————— INITIALIZE TASK ————————— //
     $('#start').click(function(){
         // If not in mTurk mode OR hit is accepted
@@ -86,7 +123,7 @@ $(document).ready(function(){
         
         // Starts experiment
         jsPsych.init({
-            timeline: [loop_instructions],
+            timeline: fishermen_timeline,
             display_element: $('#jspsych-target'),
             default_iti: exp.pause_after_trial,
             fullscreen: false,

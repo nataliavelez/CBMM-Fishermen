@@ -8,8 +8,11 @@ jsPsych.plugins['action-check'] = (function(){
       
       // If any arguments to trial are functions, evaluate them!
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-      display_element.html(trial.text);
+      var page_content = trial.text.format(trial.village, trial.payoff, trial.max_payoff, trial.img, exp.n_villages);
+      display_element.html(page_content);
+      display_element.find('.village-banner').css('background', trial.color);
       
+      // When participant selects a radio button...
       display_element.find(':radio').change(function(){
           // Check for completeness
           var all_answers = display_element.find(':checked');

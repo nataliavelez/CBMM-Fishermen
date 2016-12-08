@@ -34,4 +34,4 @@ exp = {max_trees: 3,
        survey: null,
        iti: 1500};
 
-village_colors = ['#FA8975','#F596C0', '#AABBF1', '#4BD9DF', '#7CE69B', '#E2E062'];
+village_colors = formatArray(palette('tol-rainbow', exp.n_villages), '#{0}');

@@ -1,38 +1,6 @@
-/*
-STEP 1: EXPERIMENT CONFIGURATION
-
-Options:
-max_trees, max_str
-    [numeric]
-    The maximum number of trees and stregth per fishermen, respectively.
-    
-n_trials
-    [obs]
-    Number of observations per subject
-
-optimum_trials
-    [array]
-    Must have as many elements as there are trials in n_trials. True if fishermen act optimally.
-    
-first_trial
-    [numeric]
-    The type of trial to be displayed first
-
-iti
-    [numeric]
-    Inter-trial interval, in ms
-*/
-
-// STEP 2: CREATE ALL POSSIBLE SCENARIOS
-// Helper functions: return all possible actions
-
-
-// Helper function: calculate payoff
-// state is an object with the following keys:
-//      trees [numeric]: # of trees
-//      str [array]: strength of each fisherman
-//  actions [array]: action of each fisherman (true = cleared trees)
-
+// ——————— STEP 1: CREATE ALL POSSIBLE SCENARIOS ——————— //
+// Compute payoff for a particular state (trees, strengths) and actions
+// NB: By convention, 'true' means fisherman removed trees
 function get_payoff(state, actions) {
     var fishermen = _.zip(state.str, actions);
     
@@ -52,7 +20,7 @@ function get_payoff(state, actions) {
     return fish_fished
 }
 
-// Helper function: get all payoffs
+// Helper function: get all payoffs for a particular state
 function get_all_payoffs(state) {
     // Get all actions and payoffs
     var all_actions = combinations(3);
@@ -83,6 +51,7 @@ function get_all_payoffs(state) {
     return payoffs
 }
 
+// The main part: create all possible scenarios!
 all_scenarios = []
 
 for (t = 1; t < exp.max_trees+1; t++){
@@ -101,31 +70,28 @@ for (t = 1; t < exp.max_trees+1; t++){
                 
                 // Save scenario
                 tmp_state = $.extend(tmp_state, {n_soln: n_soln});
-                all_scenarios.push(tmp_state);
+                
+                if (tmp_state.n_soln < 8) {
+                    all_scenarios.push(tmp_state);
+                }
+                
             }
         }
     }
 }
 
+// Partition scenarios by number of solutions
 scenario_groups = _.groupBy(all_scenarios, function(e){return e.n_soln});
+n_groups = _.keys(scenario_groups).length;
 
-// GET BLOCK ORDER
-var block_order = repeatArray([1,2,3], exp.n_villages/3, true);
+// ——————— STEP 2: CREATE VILLAGE ORDER ——————— //
+var village_types = [];
 
-// SAMPLE TRIALS
-trial_order = [];
-
-for (i = 0; i < exp.n_villages; i++) {
-    tmp_trials = [];
-    
-    for (t = 0; t < exp.optimum_trials.length; t++) {
-        var t =  _.sample(scenario_groups[exp.block_order[i][t]]);
-        var t_payoffs = get_all_payoffs(t);
-        var t_actions = _.filter(t_payoffs, function(e) { return exp.optimum_trials[t] ? e.is_optimal : !(e.is_optimal) });
-        
-        t_info = $.extend(t, _.sample(t_actions), {type: 'fisherman-game'});
-        tmp_trials.push(t_info);
+for (i = 1; i < n_groups+1; i++) {
+    for (j = 1; j < n_groups+1; j++) {
+        village_types.push([i,j]);
     }
-    
-    trial_order.push(tmp_trials)
 }
+
+var village_order = repeatArray(village_types, exp.n_villages/village_types.length, false);
+var village_order = _.shuffle(village_order);

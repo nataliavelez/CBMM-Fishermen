@@ -5,7 +5,9 @@ jsPsych.plugins['blame-attr'] = (function(){
   plugin.trial = function(display_element, trial){
       // If any arguments to trial are functions, evaluate them!
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-      display_element.html(trial.text);
+      var page_content = trial.text.format(trial.village, trial.payoff, trial.max_payoff, trial.img, exp.n_villages);
+      display_element.html(page_content);
+      display_element.find('.village-banner').css('background', trial.color);
       
       // Start the clock
       var startT = Date.now();
@@ -17,11 +19,11 @@ jsPsych.plugins['blame-attr'] = (function(){
           
           // Check whether all sliders have been adjusted
           var all_sliders = display_element.find('[type="range"]');
-          var slider_status = _.map(all_sliders, function(e){return e.attr('adjusted')});
+          var slider_status = _.map(all_sliders, function(e){return $(e).attr('adjusted')});
           var all_adjusted = slider_status.indexOf('false') === -1;
                     
           // If all sliders have been adjusted, proceed to next trial
-          if all_adjusted {
+          if (all_adjusted) {
               // Mark continue button as active
               display_element.find('button').removeClass('continue-inactive');
               display_element.find('button').addClass('continue-active');
@@ -40,7 +42,7 @@ jsPsych.plugins['blame-attr'] = (function(){
                   };
                   
                   display_element.html('');
-                  jsPsych.finish_trial();
+                  jsPsych.finishTrial(trial_data);
               });
           }
       });
