@@ -28,7 +28,6 @@ $(document).ready(function(){
         show_clickable_nav: true
     };
         
-    
     // Attention check
     var attn_check = {
         type: 'attn-check',

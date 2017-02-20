@@ -129,3 +129,5 @@ for (i = 0; i < village_order.length; i++) {
         trial_order.push(current_trial)
     }
 }
+
+console.log(trial_order)
