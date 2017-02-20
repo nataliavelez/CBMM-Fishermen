@@ -28,7 +28,7 @@
         <script src = 'scripts/utils.js'></script>
         <script src = 'scripts/config.js'></script>
         <script src = 'scripts/counterbalancer.js'></script>
-        <script src = 'scripts/fisherman-task.js'></script>
+        <!-- <script src = 'scripts/fisherman-task.js'></script> -->
         <link href='styles/experiment-style.css' rel='stylesheet' type='text/css'></link>
     </head>
 
@@ -142,8 +142,8 @@
             <div class = "village-container">
                 <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 1/2</td></tr></table>
             <img class = "fishing-village" src = "{2}" />
-                 <div class = "announce"><p><strong>Total fish caught:</strong> {3}<br />
-            <strong>Maximum amount:</strong> {4}</p></div>
+                 <div class = "announce"><p><strong>Amount of fish sold:</strong> {3}<br />
+            <strong>Best possible amount:</strong> {4}</p></div>
             </div>
             
             
@@ -177,6 +177,41 @@
             <button class = "continue-inactive">Continue</button>
             
         </div>
+            
+        <div class = "slide" id = "day-transition">
+            <h1>At the end of the first day...</h1>
+            
+            <p>The fishermen met in the road connecting their villages to sell their fish in the market. There were <strong>{0} trees</strong> blocking the road, and the fishermen cleared {1} trees. As a reminder, here's what each fisherman decided to do today:</p>
+            
+            <table>
+                <tr>
+                    <td><strong>Fisherman A</strong></td>
+                    <td><strong>Fisherman B</strong></td>
+                    <td><strong>Fisherman C</strong></td>
+                </tr>
+                <tr>
+                    <td><img src = "images/fisherman.png" /></td>
+                    <td><img src = "images/fisherman.png" /></td>
+                    <td><img src = "images/fisherman.png" /></td>
+                </tr>
+                <tr>
+                    <td id = "strength-a"></td>
+                    <td id = "strength-b"></td>
+                    <td id = "strength-c"></td>
+                </tr>
+                <tr>
+                    <td>{2}</td>
+                    <td>{3}</td>
+                    <td>{4}</td>
+                </tr>
+            </table>
+            
+            <p>At the end of the day, the fishermen sold {5} sacks of fish!</p>
+            
+            <p>The fishermen then returned to their homes to get ready for another day of work.</p>
+            
+            <button class = "continue-active">Continue</button>
+        </div>
         
         <div class = "slide" id = "blame-attr">
             <h1>How much is each fisherman to blame for the outcome?</h1>
@@ -184,9 +219,37 @@
             
             <div class = "village-container">
                 <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 2/2</td></tr></table>
-            <img class = "fishing-village" src = "{2}"/>
-                 <div class = "announce"><p><strong>Total fish caught:</strong> {3}<br />
-            <strong>Maximum amount:</strong> {4}</p></div>
+            <!-- <img class = "fishing-village" src = "{2}"/> -->
+                <img class = "fishing-village" src = "images/blame_stim/1_a1b1c1_a1b0c1.jpg"/>
+                 <div class = "announce"><p><strong>Amount of fish sold:</strong> {3}<br />
+            <strong>Best possible amount:</strong> {4}</p></div>
+                <div class = "reminder">
+                <p><strong>Day 1 results:</strong></p>
+                <p># trees blocking the road: {5}</p>
+                <table>
+                    <tr>
+                        <td>A</td>
+                        <td>B</td>
+                        <td>C</td>
+                    </tr>
+                    <tr>
+                    <td><img src = "images/fisherman.png" /></td>
+                    <td><img src = "images/fisherman.png" /></td>
+                    <td><img src = "images/fisherman.png" /></td>
+                </tr>
+                    
+                    <tr>
+                        <td><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"></td>
+                        <td><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"></td>
+                        <td><img class = "str" src = "images/str.png"></td>
+                    </tr>
+                    <tr>
+                        <td>Fish</td>
+                        <td>Fish</td>
+                        <td>Tree</td>
+                    </tr>
+                </table>
+                </div>
             </div>
             
             

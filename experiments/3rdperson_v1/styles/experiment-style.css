@@ -166,6 +166,34 @@ button {
     text-align: left;
 }
 
+.reminder {
+    border: 2px solid black;
+    position: absolute;
+    background: #fff;
+    text-align: left;
+    padding: 10px;
+    width: 300px;
+    left: -320px;
+    top: 45px;
+}
+
+.reminder p {
+    margin: 0;
+}
+
+.reminder table {
+    text-align: center;
+}
+
+.reminder table img {
+    max-width: 50px;
+}
+
+.str {
+    width: 25px;
+    display: inline-block;
+}
+
 .blame-slider {
     width: 300px;
     float: left;
