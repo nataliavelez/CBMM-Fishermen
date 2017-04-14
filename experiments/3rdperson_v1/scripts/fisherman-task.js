@@ -94,7 +94,7 @@ $(document).ready(function(){
         
         // Starts experiment
         jsPsych.init({
-            timeline: fishermen_timeline,
+            timeline: experiment_timeline,
             display_element: $('#jspsych-target'),
             default_iti: exp.pause_after_trial,
             fullscreen: false,
