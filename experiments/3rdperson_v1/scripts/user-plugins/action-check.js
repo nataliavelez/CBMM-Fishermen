@@ -15,35 +15,63 @@ jsPsych.plugins['action-check'] = (function(){
       display_element.html(page_content);
       display_element.find('.village-banner').css('background', trial.color);
       
+      // Correct responses
+      var actions = $.map(trial.action, function(e, i){
+          return e ? 'tree' : 'fish'
+      });
+      
+      var correct_actions = _.object(['action-a', 'action-b', 'action-c'], actions);
+      
       // When participant selects a radio button...
       display_element.find(':radio').change(function(){
+          // STEP 1: GIVE FEEDBACK
+          // Check answer
+          var ans = $(this).val();
+          var fisherman = $(this).attr('name');
+          
+          // Remove colors from other options
+          $(this).parent().parent().find('li').removeClass('correct incorrect');
+          
+          // Color feedback
+          if (ans == correct_actions[fisherman]) {
+              $(this).parent().addClass('correct');
+          } else {
+              $(this).parent().addClass('incorrect');
+          }
+          
+          // STEP 2: ADVANCE TO NEXT TRIAL          
           // Check for completeness
           var all_answers = display_element.find(':checked');
           
           // If participant has answered all three questions
           if (all_answers.length == 3) {
-              // Mark button as active
-              display_element.find('button').removeClass('continue-inactive');
-              display_element.find('button').addClass('continue-active');
+              // Check that all answers are correct
+              var all_actions = _.map(all_answers, function(e){return e.value == 'tree'});
+              var all_correct = arraysEqual(all_actions, trial.action);
               
-              // Use continue button to skip to next trial
-              display_element.find('button').on('click', function(){
-                  $(this).off('click'); // Button should only respond once
-                  var all_actions = _.map(all_answers, function(e){return e.value == 'tree'});
+              // Activate continue button
+              if (all_correct) {
+                  display_element.find('button').removeClass('continue-inactive');
+                  display_element.find('button').addClass('continue-active');
                   
-                  var trial_data = {
-                      rt: Date.now()-startT,
-                      response: all_actions,
-                      correct: arraysEqual(all_actions, trial.action)                      
-                  };
+                  display_element.find('button').on('click', function(){
+                      $(this).off('click');
+                      
+                      var trial_data = {
+                          rt: Date.now()-startT,
+                          response: all_actions,
+                          correct: all_correct}
+                      
+                      var exp_data = $.extend({}, trial, trial_data);
+                      
+                      exp.action_check_trials.push(exp_data);
+                      display_element.html('');
+                      jsPsych.finishTrial(trial_data);
+                      
+                  });
                   
-                  var exp_data = $.extend({}, trial, trial_data)
                   
-                  exp.action_check_trials.push(exp_data);
-                  
-                  display_element.html('');
-                  jsPsych.finishTrial(trial_data);
-              });
+              }
           }
       });
   }

@@ -13,13 +13,27 @@ jsPsych.plugins['reminder'] = (function(){
       });
       
       // Fill in page content
-      var page_content = trial.text.format(trial.trees,
-                                           trial.trees_cleared,
+      var page_content = trial.text.format(_.min([trial.trees, trial.trees_cleared]),
+                                           trial.trees,
                                            action[0],
                                            action[1],
                                            action[2],
-                                           trial.payoff);
+                                           trial.payoff,
+                                           trial.max_payoff);
       display_element.html(page_content);
+      
+      var fishermen = ['a', 'b', 'c'];
+      
+      for (i = 0; i < fishermen.length; i++) {
+          console.log($('#strength-'+fishermen[i]))
+          var prev_strength = trial.str[i]
+          console.log(prev_strength)
+          
+          for (s = 0; s < prev_strength; s++) {
+              $('#strength-'+fishermen[i]).append('<img src = "images/str.png" class = "str" />')
+          }
+          
+      }
         
       // Initialize continue button
       display_element.find('.continue-active').on('click', function(){

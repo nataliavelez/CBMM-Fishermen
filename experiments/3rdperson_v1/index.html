@@ -143,7 +143,7 @@
         
         <div class = "slide" id = "action-check">
             <h1>What did each fisherman do?</h1>
-            <p>(Please answer all three questions before continuing.)</p>
+            <p>(Please answer all three questions <strong>correctly</strong> before continuing.)</p>
             
             <div class = "village-container">
                 <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 1/2</td></tr></table>
@@ -187,18 +187,14 @@
         <div class = "slide" id = "day-transition">
             <h1>At the end of the first day...</h1>
             
-            <p>The fishermen met in the road connecting their villages to sell their fish in the market. There were <strong>{0} trees</strong> blocking the road, and <strong>the fishermen cleared {1} trees.</strong> As a reminder, here's what each fisherman decided to do today:</p>
+            <p>The fishermen met in the road connecting their villages to sell their fish in the market. Here's what each fisherman decided to do today:</p>
             
+            <div>
             <table class = "day-reminder">
                 <tr>
-                    <td><strong>Fisherman A</strong></td>
-                    <td><strong>Fisherman B</strong></td>
-                    <td><strong>Fisherman C</strong></td>
-                </tr>
-                <tr>
-                    <td><img src = "images/fisherman.png" /></td>
-                    <td><img src = "images/fisherman.png" /></td>
-                    <td><img src = "images/fisherman.png" /></td>
+                    <td>Fisherman A<br/><img src = "images/fisherman.png" /></td>
+                    <td>Fisherman B<br/><img src = "images/fisherman.png" /></td>
+                    <td>Fisherman C<br/><img src = "images/fisherman.png" /></td>
                 </tr>
                 <tr>
                     <td id = "strength-a"></td>
@@ -212,10 +208,13 @@
                 </tr>
             </table>
             
-            <p>At the end of the day, the fishermen sold <strong>{5} sacks of fish!</strong></p>
+            <p><strong>Trees cleared:</strong> {1}/{0}<br />
+            <strong>Fish sold:</strong> {5}/{6}</p>
+                
+            </div>
             
             <p>The fishermen then returned to their homes to get ready for another day of work.</p>
-            
+                
             <button class = "continue-active">Continue</button>
         </div>
         
@@ -230,7 +229,6 @@
             <strong>Best possible amount:</strong> {4}</p></div>
                 <div class = "reminder">
                 <p><strong>Day 1 results:</strong></p>
-                <p># trees blocking the road: {5}</p>
                 <table>
                     <tr>
                     <td>A<br /><img src = "images/fisherman.png" /></td>
@@ -244,11 +242,13 @@
                         <td id = "strC"></td>
                     </tr>
                     <tr>
+                        <td>{5}</td>
                         <td>{6}</td>
                         <td>{7}</td>
-                        <td>{8}</td>
                     </tr>
                 </table>
+                    <p>Trees cleared: {8}/{8}</p>
+                    <p>Fish sold: {9}/{9}</p>
                 </div>
             </div>
             

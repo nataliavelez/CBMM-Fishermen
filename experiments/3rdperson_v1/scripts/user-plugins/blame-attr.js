@@ -16,10 +16,11 @@ jsPsych.plugins['blame-attr'] = (function(){
                                            trial.img,
                                            trial.payoff,
                                            trial.max_payoff,
-                                           trial.prev_day.trees,
                                            prev_actions[0],
                                            prev_actions[1],
-                                           prev_actions[2]);
+                                           prev_actions[2],
+                                           trial.prev_day.trees,
+                                           trial.prev_day.payoff);
       display_element.html(page_content);
       display_element.find('.village-banner').css('background', trial.color);
       
