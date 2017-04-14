@@ -5,9 +5,35 @@ jsPsych.plugins['blame-attr'] = (function(){
   plugin.trial = function(display_element, trial){
       // If any arguments to trial are functions, evaluate them!
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-      var page_content = trial.text.format(trial.village, exp.n_villages, trial.img, trial.payoff, trial.max_payoff);
+      
+      // Fill in page content
+      var prev_actions = $.map(trial.prev_day.action, function(e, i){
+          return e? 'Tree' : 'Fish'
+      });
+      
+      var page_content = trial.text.format(trial.village,
+                                           exp.n_villages,
+                                           trial.img,
+                                           trial.payoff,
+                                           trial.max_payoff,
+                                           trial.prev_day.trees,
+                                           prev_actions[0],
+                                           prev_actions[1],
+                                           prev_actions[2]);
       display_element.html(page_content);
       display_element.find('.village-banner').css('background', trial.color);
+      
+      // Add strength stars for each fisherman
+      var fishermen = ['A', 'B', 'C'];
+      
+      for (i = 0; i < fishermen.length; i++) {
+          var prev_strength = trial.prev_day.str[i]
+          
+          for (s = 0; s < prev_strength; s++) {
+              $('#str'+fishermen[i]).append('<img src = "images/str.png" class = "str" />')
+          }
+          
+      }
       
       // Start the clock
       var startT = Date.now();
@@ -41,7 +67,10 @@ jsPsych.plugins['blame-attr'] = (function(){
                       blame: all_blame
                   };
                   
+                  var exp_data = $.extend({}, trial, trial_data)
+                  
                   display_element.html('');
+                  exp.blame_attr_trials.push(exp_data);
                   jsPsych.finishTrial(trial_data);
               });
           }

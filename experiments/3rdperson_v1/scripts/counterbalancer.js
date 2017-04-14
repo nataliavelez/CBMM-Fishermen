@@ -17,7 +17,7 @@ function get_payoff(state, actions) {
     
     // No fish caught if road to market was not cleared
     fish_fished = trees_cleared >= state.trees ? fish_fished: 0;
-    return fish_fished
+    return {fish: fish_fished, trees: trees_cleared}
 }
 
 // Helper function: get all payoffs for a particular state
@@ -37,9 +37,12 @@ function get_all_payoffs(state) {
     }
     
     var payoffs = _.map(all_actions, function(e) {
+        var payoff = get_payoff(state, e);
+        
         return {action: e,
                 img: get_img_url(e),
-                payoff: get_payoff(state, e)}
+                trees_cleared: payoff.trees,
+                payoff: payoff.fish}
     });
     
     // Tag each action according to whether it's optimal
@@ -103,31 +106,41 @@ var eligible_scenarios = _.object(_.keys(scenario_groups), eligible_scenarios);
 // Assemble trial order
 var trial_order = []
 for (i = 0; i < village_order.length; i++) {
-    trial_order.push({type: 'new-village',
-                     village: i+1,
-                     color: village_colors[i]});
+    // Start new village
+    village_info = {color: village_colors[i], village: i + 1};
+    new_village = $.extend({}, village_info, {type: 'new-village'});
+    trial_order.push(new_village);
     
-    for (t = 0; t < village_order[i].length; t++) {
-        // Get trial
-        trial_type = village_order[i][t];
-        current_state = eligible_scenarios[trial_type].pop();
-        is_optimal = exp.optimum_trials[t];
+    // Sample states and actions for each day
+    trial_types = village_order[i];
+    
+    trial_states = $.map(trial_types, function(e,i){
+        return eligible_scenarios[e].pop();
+    });
+    
+    trial_actions = $.map(trial_states, function(e, i){
+        var all_actions = get_all_payoffs(e)
         
-        // Sample action
-        all_actions = get_all_payoffs(current_state);
-        eligible_actions = _.filter(all_actions, function(a){
-            return a.is_optimal == is_optimal
+        var eligible_actions = _.filter(all_actions, function(a){
+            return a.is_optimal == exp.optimum_trials[i]
         });
-        current_action = _.sample(eligible_actions);
         
-        // Add trial information
-        current_trial = $.extend({}, current_state, current_action);
-        current_trial.color = village_colors[i];
-        current_trial.village = i+1;
-        current_trial.type = t == 0 ? 'action-check' : 'blame-attr';
-        
-        trial_order.push(current_trial)
-    }
+        return _.sample(eligible_actions)  
+    });
+    
+    // Combine states and actions into a single object for each day
+    day_info = $.map(trial_states, function(e, i) {
+        return $.extend({}, e, trial_actions[i])
+    });
+    
+    // Assemble trials
+    action_check_trial = $.extend({type: 'action-check'}, village_info, day_info[0]);
+    reminder_trial = $.extend({type: 'reminder'}, village_info, day_info[0]);
+    blame_attr_trial = $.extend({type: 'blame-attr', prev_day: day_info[0]}, village_info, day_info[1]);
+    
+    // Add trials to timeline
+    trial_order = trial_order.concat([action_check_trial, reminder_trial, blame_attr_trial]);
+
 }
 
 console.log(trial_order)

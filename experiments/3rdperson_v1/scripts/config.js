@@ -31,7 +31,9 @@ exp = {max_trees: 3,
        optimum_trials: [true, false],
        passed_tutorial: false,
        tutorial_attempts: 0,
+       action_check_trials: [],
+       blame_attr_trials: [],
        survey: null,
-       iti: 1500};
+       iti: 1000};
 
 village_colors = formatArray(palette('tol-rainbow', exp.n_villages), '#{0}');

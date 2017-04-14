@@ -98,6 +98,11 @@ button {
 	
 }
 
+#intro-img {
+    width: 600px;
+    display: block;
+    margin: 0 auto;
+}
 .instruction {
     width: 700px;
 }
@@ -172,8 +177,8 @@ button {
     background: #fff;
     text-align: left;
     padding: 10px;
-    width: 300px;
-    left: -320px;
+    width: 350px;
+    left: -370px;
     top: 45px;
 }
 
@@ -233,3 +238,24 @@ button {
     margin: 0 auto;
     padding: 20px;
 }
+
+.day-reminder {
+    display: inline-block;
+    width: 450px;
+}
+
+.day-reminder td {
+    width: 150px;
+}
+
+.reminder table {
+    width: 350px;
+    border-collapse: collapse;
+    border-style: hidden;
+}
+
+.reminder table td, .reminder table th {
+    border: 1px solid black;
+}
+
+input[type='radio'] { transform: scale(1.5); }

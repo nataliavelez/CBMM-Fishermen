@@ -20,6 +20,7 @@
         <script src = 'scripts/user-plugins/attn-check.js'></script>
         <script src = 'scripts/user-plugins/new-village.js'></script>
         <script src = 'scripts/user-plugins/action-check.js'></script>
+        <script src = 'scripts/user-plugins/reminder.js'></script>
         <script src = 'scripts/user-plugins/blame-attr.js'></script>
         <script src = 'scripts/user-plugins/sll-survey.js'></script>
         
@@ -28,7 +29,7 @@
         <script src = 'scripts/utils.js'></script>
         <script src = 'scripts/config.js'></script>
         <script src = 'scripts/counterbalancer.js'></script>
-        <!-- <script src = 'scripts/fisherman-task.js'></script> -->
+        <script src = 'scripts/fisherman-task.js'></script>
         <link href='styles/experiment-style.css' rel='stylesheet' type='text/css'></link>
     </head>
 
@@ -40,9 +41,13 @@
 
         <p class="legal">This HIT is part of a scientific research project conducted by the Social Learning Lab at Stanford and has been approved by the IRB of Stanford University. Your decision to complete this HIT is voluntary. We will only have access to your worker ID and no other information to identify you. The only other information we will have, in addition to your response, is the time at which you completed the survey and the amount of time you spent to complete it. The results of the research may be presented at scientific meetings or published in scientific journals. Clicking on the ‘SUBMIT’ button on the bottom of this page indicates that you are at least 18 years of age, and agree to complete this HIT voluntarily.</p>
 
-        <p>TO-DO: (1) Write instructions, (2) Replace SLL IRB text with CoCoLab IRB text, (3) Get CoCoLab logo for header?</p>
+        <p>This game is about fishermen! In this task, you'll see several villages with different fishermen. Day by day, the fishermen fish together, take their fish to market, and split their earnings. Sometimes, there are trees blocking the road to market—so some fishermen fish, and some fishermen clear trees. If the trees have not all been cleared from the road, the fishermen won't be able to sell any fish for the day!</p>
+            
+        <img src = 'images/intro_img.jpeg' id = "intro-img"/>
+            
+        <p>In this task, you'll meet six fisherman villages, and you'll follow each village around for two days. We'll ask you some questions about what the fishermen decided to do on each day.</p>
 
-        <p>The HIT should take 2-3 minutes. Please pay attention. Thanks!</p>
+        <p>The HIT should take 5 minutes. Please pay attention. Thanks!</p>
         <button id="start" type="button">Start Experiment</button>
         </div>
         
@@ -181,9 +186,9 @@
         <div class = "slide" id = "day-transition">
             <h1>At the end of the first day...</h1>
             
-            <p>The fishermen met in the road connecting their villages to sell their fish in the market. There were <strong>{0} trees</strong> blocking the road, and the fishermen cleared {1} trees. As a reminder, here's what each fisherman decided to do today:</p>
+            <p>The fishermen met in the road connecting their villages to sell their fish in the market. There were <strong>{0} trees</strong> blocking the road, and <strong>the fishermen cleared {1} trees.</strong> As a reminder, here's what each fisherman decided to do today:</p>
             
-            <table>
+            <table class = "day-reminder">
                 <tr>
                     <td><strong>Fisherman A</strong></td>
                     <td><strong>Fisherman B</strong></td>
@@ -206,7 +211,7 @@
                 </tr>
             </table>
             
-            <p>At the end of the day, the fishermen sold {5} sacks of fish!</p>
+            <p>At the end of the day, the fishermen sold <strong>{5} sacks of fish!</strong></p>
             
             <p>The fishermen then returned to their homes to get ready for another day of work.</p>
             
@@ -219,8 +224,7 @@
             
             <div class = "village-container">
                 <table class = "village-banner"><tr><td>Village {0}/{1}</td><td>Day 2/2</td></tr></table>
-            <!-- <img class = "fishing-village" src = "{2}"/> -->
-                <img class = "fishing-village" src = "images/blame_stim/1_a1b1c1_a1b0c1.jpg"/>
+                <img class = "fishing-village" src = "{2}"/>
                  <div class = "announce"><p><strong>Amount of fish sold:</strong> {3}<br />
             <strong>Best possible amount:</strong> {4}</p></div>
                 <div class = "reminder">
@@ -228,25 +232,23 @@
                 <p># trees blocking the road: {5}</p>
                 <table>
                     <tr>
-                        <td>A</td>
-                        <td>B</td>
-                        <td>C</td>
-                    </tr>
-                    <tr>
-                    <td><img src = "images/fisherman.png" /></td>
-                    <td><img src = "images/fisherman.png" /></td>
-                    <td><img src = "images/fisherman.png" /></td>
+                        <td>Fisherman:</td>
+                    <td>A<br /><img src = "images/fisherman.png" /></td>
+                    <td>B<br /><img src = "images/fisherman.png" /></td>
+                    <td>C<br /><img src = "images/fisherman.png" /></td>
                 </tr>
                     
                     <tr>
-                        <td><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"></td>
-                        <td><img class = "str" src = "images/str.png"><img class = "str" src = "images/str.png"></td>
-                        <td><img class = "str" src = "images/str.png"></td>
+                        <td>Strength:</td>
+                        <td id = "strA"></td>
+                        <td id = "strB"></td>
+                        <td id = "strC"></td>
                     </tr>
                     <tr>
-                        <td>Fish</td>
-                        <td>Fish</td>
-                        <td>Tree</td>
+                        <td>Action:</td>
+                        <td>{6}</td>
+                        <td>{7}</td>
+                        <td>{8}</td>
                     </tr>
                 </table>
                 </div>

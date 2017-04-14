@@ -4,6 +4,7 @@ $(document).ready(function(){
         begin_blame: $('#begin-blame').html(),
         new_village: $('#new-village').html(),
         action_check: $('#action-check').html(),
+        reminder: $('#day-transition').html(),
         blame_attr: $('#blame-attr').html(),
         oops: $('#oops').html()
     };

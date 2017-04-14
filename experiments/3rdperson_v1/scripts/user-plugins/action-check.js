@@ -37,6 +37,10 @@ jsPsych.plugins['action-check'] = (function(){
                       correct: arraysEqual(all_actions, trial.action)                      
                   };
                   
+                  var exp_data = $.extend({}, trial, trial_data)
+                  
+                  exp.action_check_trials.push(exp_data);
+                  
                   display_element.html('');
                   jsPsych.finishTrial(trial_data);
               });
