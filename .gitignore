@@ -1,4 +1,4 @@
 *.pyc
 original-fishermen
 *.json
-experiments/3rdperson_v1/private
+experiments/3rdperson_v1/private/*
