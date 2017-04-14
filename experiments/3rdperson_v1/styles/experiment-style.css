@@ -183,8 +183,8 @@ button {
     background: #fff;
     text-align: left;
     padding: 10px;
-    width: 350px;
-    left: -370px;
+    width: 200px;
+    left: -220px;
     top: 45px;
 }
 
@@ -255,20 +255,12 @@ button {
 }
 
 .reminder table {
-    width: 350px;
+    table-layout: fixed;
+    width: 200px;
     border-collapse: collapse;
     border-style: hidden;
 }
 
 .reminder table td, .reminder table th {
     border: 1px solid black;
-}
-
-input[type='radio'] { transform: scale(1.5); }
-
-.returnHIT {
-    display: block;
-    width: 500px;
-    margin: 0 auto;
-    border: 2px solid red;
 }

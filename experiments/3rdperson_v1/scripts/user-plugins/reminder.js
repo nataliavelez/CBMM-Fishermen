@@ -8,7 +8,7 @@ jsPsych.plugins['reminder'] = (function(){
       
       // Label actions
       var action = $.map(trial.action, function(e,i){
-          var action = e ? 'Tree' : 'Fish'
+          var action = e ? 'Cleared <strong>trees</strong>' : 'Caught <strong>fish</strong>'
           return action
       });
       

@@ -8,7 +8,7 @@ jsPsych.plugins['blame-attr'] = (function(){
       
       // Fill in page content
       var prev_actions = $.map(trial.prev_day.action, function(e, i){
-          return e? 'Tree' : 'Fish'
+          return e ? 'Cleared <strong>trees</strong>' : 'Caught <strong>fish</strong>'
       });
       
       var page_content = trial.text.format(trial.village,
