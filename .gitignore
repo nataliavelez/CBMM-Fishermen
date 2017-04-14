@@ -1,3 +1,4 @@
 *.pyc
 original-fishermen
-auth.json
+*.json
+private
