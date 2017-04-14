@@ -53,6 +53,12 @@ button {
     position: relative;
 }
 
+#logo img {
+    display: block;
+    width: 350px;
+    margin: 0 auto;
+}
+
 .left-text, #attn-check {
     text-align: left;
 }
@@ -259,3 +265,10 @@ button {
 }
 
 input[type='radio'] { transform: scale(1.5); }
+
+.returnHIT {
+    display: block;
+    width: 500px;
+    margin: 0 auto;
+    border: 2px solid red;
+}
